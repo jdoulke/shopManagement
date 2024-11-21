@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="720.0" maxWidth="1140.0" minHeight="720.0" minWidth="1140.0" prefHeight="720.0" prefWidth="1140.0" style="-fx-background-color: linear-gradient(to bottom, #3C3C3C, #2E2E2E);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.onlinestore.jdoulke.onlinestorefx.controllers.customers.CustomerPageController">
+   <children>
+      <StackPane fx:id="notificationPane" layoutX="808.0" layoutY="653.0" prefHeight="73.0" prefWidth="339.0" style="-fx-background-radius: 10; -fx-padding: 10; " visible="false">
+         <children>
+            <Label fx:id="notificationLabel" layoutX="0.0" layoutY="0.0" prefHeight="82.0" prefWidth="333.0" text="" />
+         </children>
+      </StackPane>
+      <HBox fx:id="customer_menu_pane" alignment="CENTER_LEFT" maxHeight="100.0" maxWidth="1140.0" minHeight="100.0" minWidth="1140.0" prefHeight="100.0" prefWidth="1140.0" spacing="20.0">
+         <children>
+            <Label fx:id="add_customer_label" alignment="CENTER" onMouseClicked="#handleMenuClick" onMouseEntered="#handleMouseEnterLabel" onMouseExited="#handleMouseExitLabel" prefHeight="73.0" prefWidth="285.0" text="Add customer" textFill="WHITE">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Label>
+            <Label fx:id="remove_customer_label" alignment="CENTER" onMouseClicked="#handleMenuClick" onMouseEntered="#handleMouseEnterLabel" onMouseExited="#handleMouseExitLabel" prefHeight="73.0" prefWidth="285.0" text="Remove customer" textFill="WHITE">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Label>
+            <Label fx:id="edit_customer_label" alignment="CENTER" onMouseClicked="#handleMenuClick" onMouseEntered="#handleMouseEnterLabel" onMouseExited="#handleMouseExitLabel" prefHeight="73.0" prefWidth="285.0" text="Edit customer" textFill="WHITE">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Label>
+            <Label fx:id="search_customer_label" alignment="CENTER" onMouseClicked="#handleMenuClick" onMouseEntered="#handleMouseEnterLabel" onMouseExited="#handleMouseExitLabel" prefHeight="73.0" prefWidth="285.0" text="Search customer" textFill="WHITE">
+               <font>
+                  <Font size="33.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <StackPane fx:id="customer_selection_pane" layoutY="103.0" maxHeight="620.0" maxWidth="1140.0" minHeight="620.0" minWidth="1140.0" prefHeight="620.0" prefWidth="1140.0" />
+   </children>
+</Pane>

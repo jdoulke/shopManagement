@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="main_pane" maxHeight="720.0" maxWidth="1140.0" minHeight="720.0" minWidth="1140.0" prefHeight="720.0" prefWidth="1140.0" style="-fx-background-color: linear-gradient(to bottom, #3C3C3C, #2E2E2E);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.onlinestore.jdoulke.onlinestorefx.controllers.HomeController">
+   <children>
+      <StackPane fx:id="notificationPane" layoutX="798.0" layoutY="643.0" prefHeight="73.0" prefWidth="339.0" style="-fx-background-radius: 10; -fx-padding: 10; " visible="false">
+         <children>
+            <Label fx:id="notificationLabel" layoutX="0.0" layoutY="0.0" prefHeight="82.0" prefWidth="333.0" text="" />
+         </children>
+      </StackPane>
+      <Label fx:id="welcome_label" layoutX="38.0" layoutY="33.0" prefHeight="53.0" prefWidth="600.0" text="Welcome user ΤΑΔΕ" textFill="WHITE">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="selection_box" layoutX="38.0" layoutY="131.0" prefHeight="25.0" prefWidth="258.0" />
+      <Label layoutX="38.0" layoutY="86.0" prefHeight="30.0" prefWidth="258.0" text="Κορυφαίες Αναζητήσεις" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TableView fx:id="logTable" layoutX="506.0" layoutY="89.0" prefHeight="563.0" prefWidth="600">
+         <columns>
+            <TableColumn fx:id="logIdColumn" prefWidth="42.0" text="Log ID" />
+            <TableColumn fx:id="operationTypeColumn" prefWidth="105.0" text="Operation Type" />
+            <TableColumn fx:id="tableNameColumn" prefWidth="93.0" text="Table Name" />
+            <TableColumn fx:id="operationTimeColumn" prefWidth="101.0" text="Operation Time" />
+            <TableColumn fx:id="performedByColumn" prefWidth="87.0" text="Performed By" />
+            <TableColumn fx:id="oldDataColumn" prefWidth="71.0" text="Old Data" />
+            <TableColumn fx:id="newDataColumn" prefWidth="100.0" text="New Data" />
+         </columns>
+      </TableView>
+      <Label layoutX="756.0" layoutY="37.0" prefHeight="46.0" prefWidth="101.0" text="Logs" textFill="WHITE">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Label>
+      <Button fx:id="export_button" layoutX="606.0" layoutY="667.0" mnemonicParsing="false" onMouseClicked="#exportToTxt" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: #800080;" text="Export logs to txt" textFill="WHITE" />
+      <TableView fx:id="table_selection" layoutX="38.0" layoutY="178.0" prefHeight="474.0" prefWidth="382.0">
+        <columns>
+          <TableColumn prefWidth="38.0" text="id" />
+          <TableColumn prefWidth="116.0" text="username" />
+            <TableColumn prefWidth="129.0" text="C2" />
+            <TableColumn prefWidth="98.0" text="C2" />
+        </columns>
+      </TableView>
+      <Button fx:id="clearLogsButton" layoutX="856.0" layoutY="667.0" mnemonicParsing="false" onMouseClicked="#clearLogs" prefHeight="25.0" prefWidth="169.0" style="-fx-background-color: #800080;" text="Delete logs from Database" textFill="WHITE" />
+   </children>
+</Pane>
