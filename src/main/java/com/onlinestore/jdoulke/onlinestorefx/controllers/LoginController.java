@@ -13,10 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import oracle.jdbc.OracleTypes;
 
 import java.io.IOException;
 import java.sql.*;
@@ -118,38 +116,39 @@ public class LoginController {
     private void handleLogin(Connection dbconnection, CallableStatement validateStmt) throws SQLException {
         int userId = validateStmt.getInt(3);
 
-        CallableStatement userDetailsStmt = dbconnection.prepareCall("{call get_user_details(?, ?)}");
+        CallableStatement userDetailsStmt = dbconnection.prepareCall("{CALL get_user_details(?)}");
         userDetailsStmt.setInt(1, userId);
-        userDetailsStmt.registerOutParameter(2, OracleTypes.CURSOR);
 
-        userDetailsStmt.execute();
-        ResultSet rs = (ResultSet) userDetailsStmt.getObject(2);
+        ResultSet rs = userDetailsStmt.executeQuery();
 
-        rs.next();
-        User user = new User(
-                rs.getInt("user_id"),
-                rs.getString("username"),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getInt("is_admin") == 1
-        );
+        if(rs.next()) {
+            User user = new User(
+                    rs.getInt("user_id"),
+                    rs.getString("username"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getInt("is_admin") == 1
+            );
 
-        UserSession.setCurrentUser(user);
+            UserSession.setCurrentUser(user);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main_view.fxml"));
-        Parent root;
-        try {
-            root = fxmlLoader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/main_view.fxml"));
+            Parent root;
+            try {
+                root = fxmlLoader.load();
 
-            Scene scene = new Scene(root, 1200, 720);
-            Stage stage = (Stage) user_field.getScene().getWindow();
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.centerOnScreen();
-            stage.show();
+                Scene scene = new Scene(root, 1200, 720);
+                Stage stage = (Stage) user_field.getScene().getWindow();
+                stage.setResizable(false);
+                stage.setScene(scene);
+                stage.centerOnScreen();
+                stage.show();
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            Utils.popUpMessage("User not found!", 3, "red", "white", true, notificationPane, notificationLabel);
         }
         validateStmt.close();
         userDetailsStmt.close();
@@ -164,12 +163,14 @@ public class LoginController {
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
 
-            CallableStatement validateStmt = dbconnection.prepareCall("{call validate_user(?, ?, ?)}");
+            CallableStatement validateStmt = dbconnection.prepareCall("{CALL validate_user(?, ?, ?)}");
             validateStmt.setString(1, user_field.getText());
             validateStmt.setString(2, pass_field.getText());
-            validateStmt.registerOutParameter(3, Types.NUMERIC);
+            validateStmt.registerOutParameter(3, Types.INTEGER);
 
             validateStmt.execute();
+
+            Integer userId = validateStmt.getInt(3);
 
             if (validateStmt.getObject(3) != null) {
                 handleLogin(dbconnection, validateStmt);
