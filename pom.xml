@@ -35,6 +35,11 @@
       <version>19.3.0.0</version>
     </dependency>
     <dependency>
+      <groupId>org.mariadb.jdbc</groupId>
+      <artifactId>mariadb-java-client</artifactId>
+      <version>3.0.8</version>
+    </dependency>
+    <dependency>
       <groupId>org.controlsfx</groupId>
       <artifactId>controlsfx</artifactId>
       <version>11.1.2</version>
@@ -55,6 +60,13 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>

@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String URL = "jdbc:oracle:thin:@//192.168.6.21:1521/dblabs";
-    private static final String USER = "iee2019040";
-    private static final String PASSWORD = "2310210347";
+    private static final String URL = "jdbc:mariadb://144.24.184.36:3306/shopmanagement";
+    private static final String USER = "user";
+    private static final String PASSWORD = "SecurePass123!";
 
     public static Connection getConnection() throws SQLException {
 
