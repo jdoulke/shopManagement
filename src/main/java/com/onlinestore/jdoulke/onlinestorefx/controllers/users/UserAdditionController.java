@@ -12,6 +12,7 @@ import javafx.scene.layout.StackPane;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Types;
 
 public class UserAdditionController {
 
@@ -52,15 +53,14 @@ public class UserAdditionController {
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
 
-            CallableStatement userAdditionStmt = dbconnection.prepareCall("{call add_user(?, ?, ?, ?, ?, ?)}");
+            CallableStatement userAdditionStmt = dbconnection.prepareCall("{CALL add_user(?, ?, ?, ?, ?, ?)}");
 
             userAdditionStmt.setString(1, username_field.getText());
             userAdditionStmt.setString(2, password_field.getText());
             userAdditionStmt.setString(3, first_name_field.getText());
             userAdditionStmt.setString(4, last_name_field.getText());
             userAdditionStmt.setInt(5, is_admin_box.getValue().equals("YES") ? 1 : 0);
-            userAdditionStmt.registerOutParameter(6, java.sql.Types.INTEGER);
-
+            userAdditionStmt.registerOutParameter(6, Types.INTEGER);
 
             userAdditionStmt.execute();
 

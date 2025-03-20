@@ -9,7 +9,10 @@ import javafx.scene.layout.StackPane;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static java.lang.Integer.parseInt;
 
 public class UserRemovalController {
 
@@ -51,32 +54,27 @@ public class UserRemovalController {
     private void searchUserByID(String userIdText) {
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement userSearchStmt = dbconnection.prepareCall("{call get_user(?, ?, ?, ?, ?, ?)}");
+            CallableStatement userSearchStmt = dbconnection.prepareCall("{CALL get_user(?)}");
 
-            int userId = Integer.parseInt(userIdText);
-            userSearchStmt.setInt(1, userId);
-            userSearchStmt.registerOutParameter(2, java.sql.Types.VARCHAR);
-            userSearchStmt.registerOutParameter(3, java.sql.Types.VARCHAR);
-            userSearchStmt.registerOutParameter(4, java.sql.Types.VARCHAR);
-            userSearchStmt.registerOutParameter(5, java.sql.Types.VARCHAR);
-            userSearchStmt.registerOutParameter(6, java.sql.Types.INTEGER);
+            userSearchStmt.setInt(1, parseInt(userIdText));
+            ResultSet rs = userSearchStmt.executeQuery();
 
-            userSearchStmt.execute();
+            if(rs.next()) {
+                username_label.setText(rs.getString("username"));
+                password_label.setText(rs.getString("pass"));
+                first_name_label.setText(rs.getString("first_name"));
+                last_name_label.setText(rs.getString("last_name"));
+                admin_label.setText(rs.getInt("is_admin") == 1 ? "YES" : "NO");
+            } else {
+                resetFields(true);
+            }
 
-            if(userSearchStmt.getString(2) != null) {
-                username_label.setText(userSearchStmt.getString(2));
-                password_label.setText(userSearchStmt.getString(3));
-                first_name_label.setText(userSearchStmt.getString(4));
-                last_name_label.setText(userSearchStmt.getString(5));
-                admin_label.setText(userSearchStmt.getInt(6) == 1 ? "YES" : "NO");
-            } else resetFields(true);
-
+            rs.close();
 
             userSearchStmt.close();
             dbconnection.close();
         } catch (SQLException e) {
             resetFields(true);
-            System.out.println(e.getMessage());
         }
     }
 
@@ -89,14 +87,18 @@ public class UserRemovalController {
 
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement userDeleteStmt = dbconnection.prepareCall("{call delete_user(?)}");
+            CallableStatement userDeleteStmt = dbconnection.prepareCall("{CALL delete_user(?, ?)}");
+
 
             int userId = Integer.parseInt(user_id_field.getText());
             userDeleteStmt.setInt(1, userId);
+            userDeleteStmt.registerOutParameter(2, java.sql.Types.INTEGER);
 
-            int affectedRows = userDeleteStmt.executeUpdate();
+            userDeleteStmt.execute();
 
-            if (affectedRows > 0) {
+            int isDeleted = userDeleteStmt.getInt(2); // Παίρνουμε την τιμή του p_deleted
+
+            if (isDeleted == 1) {
                 showPopupMessage("User deleted successfully!", 3, "green", "white", true);
                 resetFields(false);
             } else {

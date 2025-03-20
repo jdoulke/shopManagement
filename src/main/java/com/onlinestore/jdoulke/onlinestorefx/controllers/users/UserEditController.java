@@ -10,7 +10,10 @@ import javafx.scene.layout.StackPane;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static java.lang.Integer.parseInt;
 
 public class UserEditController {
 
@@ -61,9 +64,9 @@ public class UserEditController {
 
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement userUpdateStmt = dbconnection.prepareCall("{call update_user(?, ?, ?, ?, ?, ?)}");
+            CallableStatement userUpdateStmt = dbconnection.prepareCall("{CALL update_user(?, ?, ?, ?, ?, ?)}");
 
-            int userId = Integer.parseInt(user_id_field.getText());
+            int userId = parseInt(user_id_field.getText());
             userUpdateStmt.setInt(1, userId);
             userUpdateStmt.setString(2, username_field.getText());
             userUpdateStmt.setString(3, password_field.getText());
@@ -88,24 +91,18 @@ public class UserEditController {
     private void searchUserByID(String userIdText) {
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement userSearchStmt = dbconnection.prepareCall("{call get_user(?, ?, ?, ?, ?, ?)}");
+            CallableStatement userSearchStmt = dbconnection.prepareCall("{CALL get_user(?)}");
 
-            int userId = Integer.parseInt(userIdText);
-            userSearchStmt.setInt(1, userId);
-            userSearchStmt.registerOutParameter(2, java.sql.Types.VARCHAR); // username
-            userSearchStmt.registerOutParameter(3, java.sql.Types.VARCHAR); // password
-            userSearchStmt.registerOutParameter(4, java.sql.Types.VARCHAR); // first name
-            userSearchStmt.registerOutParameter(5, java.sql.Types.VARCHAR); // last name
-            userSearchStmt.registerOutParameter(6, java.sql.Types.INTEGER); // is_admin
+            userSearchStmt.setInt(1, parseInt(userIdText));
+            ResultSet rs = userSearchStmt.executeQuery();
 
-            userSearchStmt.execute();
 
-            if(userSearchStmt.getString(2) != null) {
-                username_field.setText(userSearchStmt.getString(2));
-                password_field.setText(userSearchStmt.getString(3));
-                first_name_field.setText(userSearchStmt.getString(4));
-                last_name_field.setText(userSearchStmt.getString(5));
-                is_admin_box.setValue(userSearchStmt.getInt(6) == 1 ? "YES" : "NO");
+            if(rs.next()) {
+                username_field.setText(rs.getString("username"));
+                password_field.setText(rs.getString("pass"));
+                first_name_field.setText(rs.getString("first_name"));
+                last_name_field.setText(rs.getString("last_name"));
+                is_admin_box.setValue(rs.getInt("is_admin") == 1 ? "YES" : "NO");
             } else resetFields(true);
 
 
@@ -113,7 +110,6 @@ public class UserEditController {
             dbconnection.close();
         } catch (SQLException e) {
             resetFields(true);
-            System.out.println(e.getMessage());
         }
     }
 
