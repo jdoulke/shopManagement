@@ -20,8 +20,4 @@ public class GenericEntry {
         return data.getOrDefault(column, "");
     }
 
-
-    public Map<String, String> getAllData() {
-        return data;
-    }
 }

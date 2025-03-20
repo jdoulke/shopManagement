@@ -19,21 +19,6 @@ public class OrderItem {
         this.name = name;
     }
 
-    public int getOrderItemId() {
-        return orderItemId;
-    }
-
-    public void setOrderItemId(int orderItemId) {
-        this.orderItemId = orderItemId;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
 
     public int getProductId() {
         return productId;
@@ -54,11 +39,6 @@ public class OrderItem {
 
     public double getItemPrice() {
         return itemPrice;
-    }
-
-    public void setItemPrice(double itemPrice) {
-        this.itemPrice = itemPrice;
-        this.totalPrice = this.quantity * this.itemPrice;
     }
 
     public double getTotalPrice() {
