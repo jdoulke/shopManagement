@@ -44,7 +44,7 @@ public class ProductAdditionController {
             int stockQuantity = Integer.parseInt(stock_quantity_field.getText());
 
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement productAdditionStmt = dbconnection.prepareCall("{call add_product(?, ?, ?, ?, ?, ?)}");
+            CallableStatement productAdditionStmt = dbconnection.prepareCall("{CALL add_product(?, ?, ?, ?, ?, ?)}");
 
             productAdditionStmt.setString(1, name_field.getText());
             productAdditionStmt.setString(2, description_field.getText());

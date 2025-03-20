@@ -55,7 +55,7 @@ public class ProductEditController {
 
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement productUpdateStmt = dbconnection.prepareCall("{call update_product(?, ?, ?, ?, ?, ?)}");
+            CallableStatement productUpdateStmt = dbconnection.prepareCall("{CALL update_product(?, ?, ?, ?, ?, ?)}");
 
             int productId = Integer.parseInt(product_id_field.getText());
             double price = Double.parseDouble(price_field.getText());
@@ -68,9 +68,15 @@ public class ProductEditController {
             productUpdateStmt.setInt(5, stock);
             productUpdateStmt.setString(6, category_field.getText());
 
-            productUpdateStmt.execute();
+            int affectedRows = productUpdateStmt.executeUpdate();
 
-            showPopupMessage("Product updated successfully!", 3, "green", "white", true);
+            if (affectedRows > 0) {
+                showPopupMessage("Product updated successfully!", 3, "green", "white", true);
+                resetFields();
+                product_id_field.setText("");
+            } else {
+                showPopupMessage("Product not found.", 3, "red", "white", true);
+            }
 
             productUpdateStmt.close();
             dbconnection.close();
@@ -85,14 +91,12 @@ public class ProductEditController {
     private void searchProduct(String productId) {
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement productSearchStmt = dbconnection.prepareCall("{call get_product(?, ?)}");
+            CallableStatement productSearchStmt = dbconnection.prepareCall("{CALL get_product(?)}");
 
             int id = Integer.parseInt(productId);
             productSearchStmt.setInt(1, id);
-            productSearchStmt.registerOutParameter(2, OracleTypes.CURSOR);
 
-            productSearchStmt.execute();
-            ResultSet rs = (ResultSet) productSearchStmt.getObject(2);
+            ResultSet rs = productSearchStmt.executeQuery(); // Εκτελούμε το query και διαβάζουμε τα δεδομένα
 
             if (rs.next()) {
                 name_field.setText(rs.getString("name"));

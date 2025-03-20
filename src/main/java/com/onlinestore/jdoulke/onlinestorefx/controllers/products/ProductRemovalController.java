@@ -68,12 +68,9 @@ public class ProductRemovalController {
     public void loadProducts() {
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement productStmt = dbconnection.prepareCall("{call get_products(?)}");
+            CallableStatement productStmt = dbconnection.prepareCall("{CALL get_products()}");
 
-            productStmt.registerOutParameter(1, OracleTypes.CURSOR);
-
-            productStmt.execute();
-            ResultSet rs = (ResultSet) productStmt.getObject(1);
+            ResultSet rs = productStmt.executeQuery(); // Διαβάζουμε τα αποτελέσματα
 
             productData.clear();
             while (rs.next()) {
@@ -107,12 +104,12 @@ public class ProductRemovalController {
 
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement productRemoveStmt = dbconnection.prepareCall("{call delete_product(?)}");
+            CallableStatement productRemoveStmt = dbconnection.prepareCall("{CALL delete_product(?)}");
 
             int productId = Integer.parseInt(product_id_field.getText());
             productRemoveStmt.setInt(1, productId);
 
-            int affectedRows = productRemoveStmt.executeUpdate();
+            int affectedRows = productRemoveStmt.executeUpdate(); // Διαγραφή προϊόντος
 
             if (affectedRows > 0) {
                 showPopupMessage("Product removed successfully.", 3, "green", "white", true);
@@ -133,14 +130,12 @@ public class ProductRemovalController {
     private void searchProduct(String productId) {
         try {
             Connection dbconnection = DatabaseConnection.getConnection();
-            CallableStatement productSearchStmt = dbconnection.prepareCall("{call get_product(?, ?)}");
+            CallableStatement productSearchStmt = dbconnection.prepareCall("{CALL get_product(?)}");
 
             int id = Integer.parseInt(productId);
             productSearchStmt.setInt(1, id);
-            productSearchStmt.registerOutParameter(2, OracleTypes.CURSOR);
 
-            productSearchStmt.execute();
-            ResultSet rs = (ResultSet) productSearchStmt.getObject(2);
+            ResultSet rs = productSearchStmt.executeQuery(); // Εκτελούμε το query και διαβάζουμε τα δεδομένα
 
             if (rs.next()) {
                 name_label.setText(rs.getString("name"));
